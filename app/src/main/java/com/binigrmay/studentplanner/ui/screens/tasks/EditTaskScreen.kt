@@ -22,6 +22,21 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 /**
+ * Helper function to format reminder time
+ */
+private fun formatReminderTime(minutes: Long): String {
+    return when (minutes) {
+        15L -> "15 minutes before"
+        30L -> "30 minutes before"
+        60L -> "1 hour before"
+        120L -> "2 hours before"
+        1440L -> "1 day before"
+        2880L -> "2 days before"
+        else -> "$minutes minutes before"
+    }
+}
+
+/**
  * Screen for editing an existing task
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,6 +56,8 @@ fun EditTaskScreen(
     var showDatePicker by remember { mutableStateOf(false) }
     var expandedPriority by remember { mutableStateOf(false) }
     var reminderEnabled by remember { mutableStateOf(false) }
+    var reminderTime by remember { mutableStateOf(60L) } // Default 1 hour
+    var expandedReminderTime by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
     
     // Load the task
@@ -55,6 +72,7 @@ fun EditTaskScreen(
                 category = it.category
                 dueDate = it.dueDate
                 reminderEnabled = it.reminderEnabled
+                reminderTime = it.reminderTime ?: 60L
             }
         }
     }
@@ -207,24 +225,78 @@ fun EditTaskScreen(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                 )
             ) {
-                Row(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(Icons.Filled.Notifications, contentDescription = null)
-                        Text("Enable Reminder")
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(Icons.Filled.Notifications, contentDescription = null)
+                            Text("Enable Reminder")
+                        }
+                        Switch(
+                            checked = reminderEnabled,
+                            onCheckedChange = { reminderEnabled = it }
+                        )
                     }
-                    Switch(
-                        checked = reminderEnabled,
-                        onCheckedChange = { reminderEnabled = it }
-                    )
+                    
+                    // Reminder Time Selector (only shown when reminder is enabled)
+                    if (reminderEnabled) {
+                        Box(modifier = Modifier.fillMaxWidth()) {
+                            OutlinedButton(
+                                onClick = { expandedReminderTime = true },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Icon(Icons.Filled.AccountBox, contentDescription = null)
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text("Remind me: ${formatReminderTime(reminderTime)}")
+                                Spacer(modifier = Modifier.weight(1f))
+                                Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
+                            }
+                            
+                            DropdownMenu(
+                                expanded = expandedReminderTime,
+                                onDismissRequest = { expandedReminderTime = false }
+                            ) {
+                                val reminderOptions = listOf(
+                                    15L to "15 minutes before",
+                                    30L to "30 minutes before",
+                                    60L to "1 hour before",
+                                    120L to "2 hours before",
+                                    1440L to "1 day before",
+                                    2880L to "2 days before"
+                                )
+                                
+                                reminderOptions.forEach { (minutes, label) ->
+                                    DropdownMenuItem(
+                                        text = { Text(label) },
+                                        onClick = {
+                                            reminderTime = minutes
+                                            expandedReminderTime = false
+                                        },
+                                        trailingIcon = {
+                                            if (reminderTime == minutes) {
+                                                Icon(
+                                                    Icons.Filled.Build,
+                                                    contentDescription = "Selected",
+                                                    modifier = Modifier.size(20.dp)
+                                                )
+                                            }
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
             
@@ -243,7 +315,7 @@ fun EditTaskScreen(
                                 category = category.ifBlank { "General" },
                                 dueDate = dueDate,
                                 reminderEnabled = reminderEnabled,
-                                reminderTime = if (reminderEnabled) 60 else null
+                                reminderTime = if (reminderEnabled) reminderTime else null
                             )
                         )
                         onNavigateBack()
