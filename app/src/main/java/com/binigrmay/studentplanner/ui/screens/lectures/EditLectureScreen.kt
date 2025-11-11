@@ -15,6 +15,21 @@ import com.binigrmay.studentplanner.data.model.Lecture
 import com.binigrmay.studentplanner.viewmodel.LectureViewModel
 
 /**
+ * Helper function to format reminder time
+ */
+private fun formatReminderTime(minutes: Int): String {
+    return when (minutes) {
+        15 -> "15 minutes before"
+        30 -> "30 minutes before"
+        60 -> "1 hour before"
+        120 -> "2 hours before"
+        1440 -> "1 day before"
+        2880 -> "2 days before"
+        else -> "$minutes minutes before"
+    }
+}
+
+/**
  * Screen for editing an existing lecture
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,6 +50,9 @@ fun EditLectureScreen(
     var showStartTimePicker by remember { mutableStateOf(false) }
     var showEndTimePicker by remember { mutableStateOf(false) }
     var isRecurring by remember { mutableStateOf(true) }
+    var reminderEnabled by remember { mutableStateOf(false) }
+    var reminderTime by remember { mutableStateOf(15) } // Default 15 minutes
+    var expandedReminderTime by remember { mutableStateOf(false) }
     var color by remember { mutableStateOf("#6200EE") }
     var showDeleteDialog by remember { mutableStateOf(false) }
     
@@ -50,6 +68,8 @@ fun EditLectureScreen(
                 startTime = it.startTime
                 endTime = it.endTime
                 isRecurring = it.isRecurring
+                reminderEnabled = it.reminderEnabled
+                reminderTime = it.reminderMinutesBefore
                 color = it.color
             }
         }
@@ -198,6 +218,88 @@ fun EditLectureScreen(
                 }
             }
             
+            // Reminder Toggle
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(Icons.Filled.Notifications, contentDescription = null)
+                            Text("Enable Reminder")
+                        }
+                        Switch(
+                            checked = reminderEnabled,
+                            onCheckedChange = { reminderEnabled = it }
+                        )
+                    }
+                    
+                    // Reminder Time Selector (only shown when reminder is enabled)
+                    if (reminderEnabled) {
+                        Box(modifier = Modifier.fillMaxWidth()) {
+                            OutlinedButton(
+                                onClick = { expandedReminderTime = true },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Icon(Icons.Filled.AccountBox, contentDescription = null)
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text("Remind me: ${formatReminderTime(reminderTime)}")
+                                Spacer(modifier = Modifier.weight(1f))
+                                Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
+                            }
+                            
+                            DropdownMenu(
+                                expanded = expandedReminderTime,
+                                onDismissRequest = { expandedReminderTime = false }
+                            ) {
+                                val reminderOptions = listOf(
+                                    15 to "15 minutes before",
+                                    30 to "30 minutes before",
+                                    60 to "1 hour before",
+                                    120 to "2 hours before",
+                                    1440 to "1 day before",
+                                    2880 to "2 days before"
+                                )
+                                
+                                reminderOptions.forEach { (minutes, label) ->
+                                    DropdownMenuItem(
+                                        text = { Text(label) },
+                                        onClick = {
+                                            reminderTime = minutes
+                                            expandedReminderTime = false
+                                        },
+                                        trailingIcon = {
+                                            if (reminderTime == minutes) {
+                                                Icon(
+                                                    Icons.Filled.Build,
+                                                    contentDescription = "Selected",
+                                                    modifier = Modifier.size(20.dp)
+                                                )
+                                            }
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
             Spacer(modifier = Modifier.height(8.dp))
             
             // Update Button
@@ -213,6 +315,8 @@ fun EditLectureScreen(
                                 startTime = startTime,
                                 endTime = endTime,
                                 isRecurring = isRecurring,
+                                reminderEnabled = reminderEnabled,
+                                reminderMinutesBefore = if (reminderEnabled) reminderTime else 15,
                                 color = color
                             )
                         )
