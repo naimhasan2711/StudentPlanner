@@ -1,7 +1,9 @@
 package com.binigrmay.studentplanner.worker
 
+import android.Manifest
 import android.content.Context
 import android.util.Log
+import androidx.annotation.RequiresPermission
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -23,6 +25,7 @@ class TaskReminderWorker @AssistedInject constructor(
         private const val TAG = "TaskReminderWorker"
     }
     
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     override suspend fun doWork(): Result {
         Log.d(TAG, "========== TASK REMINDER TRIGGERED ==========")
         return try {
