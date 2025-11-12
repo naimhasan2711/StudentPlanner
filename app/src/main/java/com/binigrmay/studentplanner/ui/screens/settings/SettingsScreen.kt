@@ -25,7 +25,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.binigrmay.studentplanner.R
 import com.binigrmay.studentplanner.viewmodel.SettingsViewModel
 
 /**
@@ -76,8 +78,7 @@ fun SettingsScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                //replace later with daark mode icon
-                                Icons.Filled.Star,
+                                painter = if (isDarkTheme) painterResource(id = R.drawable.ic_dark) else painterResource(id = R.drawable.ic_light),
                                 contentDescription = "Dark Theme"
                             )
                             Column {
@@ -119,7 +120,7 @@ fun SettingsScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            Icons.Filled.Info,
+                            painter = painterResource(id = R.drawable.ic_info) ,
                             contentDescription = "App Info"
                         )
                         Column {
@@ -140,28 +141,6 @@ fun SettingsScreen(
                             )
                         }
                     }
-                }
-            }
-            
-            // Statistics Card (Future feature)
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        "Statistics",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    
-                    Spacer(modifier = Modifier.height(8.dp))
-                    
-                    Text(
-                        "Task completion statistics and insights coming soon!",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
                 }
             }
         }

@@ -1,20 +1,16 @@
 package com.binigrmay.studentplanner.ui.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.binigrmay.studentplanner.R
 
 /**
  * Bottom navigation bar
@@ -29,7 +25,7 @@ fun BottomNavigationBar(navController: NavHostController) {
             NavigationBarItem(
                 icon = {
                     Icon(
-                        imageVector = getIconForRoute(item.route),
+                        painter = painterResource(id = getIconForRoute(item.route)),
                         contentDescription = item.title
                     )
                 },
@@ -55,14 +51,14 @@ fun BottomNavigationBar(navController: NavHostController) {
 }
 
 /**
- * Get the appropriate icon for each route
+ * Get the appropriate icon drawable resource for each route
  */
-private fun getIconForRoute(route: String): ImageVector {
+private fun getIconForRoute(route: String): Int {
     return when (route) {
-        Screen.Today.route -> Icons.Filled.Home
-        Screen.Tasks.route -> Icons.Filled.CheckCircle
-        Screen.Calendar.route -> Icons.Filled.DateRange
-        Screen.Settings.route -> Icons.Filled.Settings
-        else -> Icons.Filled.Home
+        Screen.Today.route -> R.drawable.ic_home
+        Screen.Tasks.route -> R.drawable.ic_task
+        Screen.Calendar.route -> R.drawable.ic_calender
+        Screen.Settings.route -> R.drawable.ic_settings
+        else -> R.drawable.ic_title
     }
 }
