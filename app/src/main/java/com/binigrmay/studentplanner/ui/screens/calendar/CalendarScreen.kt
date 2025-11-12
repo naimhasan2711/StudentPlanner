@@ -17,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -43,8 +42,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.binigrmay.studentplanner.R
 import com.binigrmay.studentplanner.data.model.DayOfWeek
 import com.binigrmay.studentplanner.ui.components.LectureCard
 import com.binigrmay.studentplanner.viewmodel.LectureViewModel
@@ -266,7 +267,7 @@ fun CalendarScreen(
                             horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             Icon(
-                                imageVector = Icons.Filled.Build,
+                                painter = painterResource(id = R.drawable.ic_task),
                                 contentDescription = "Add Task",
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(32.dp)
@@ -302,7 +303,7 @@ fun CalendarScreen(
                             horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             Icon(
-                                imageVector = Icons.Filled.Home,
+                                painter = painterResource(id = R.drawable.ic_schedule),
                                 contentDescription = "Add Lecture",
                                 tint = MaterialTheme.colorScheme.secondary,
                                 modifier = Modifier.size(32.dp)
