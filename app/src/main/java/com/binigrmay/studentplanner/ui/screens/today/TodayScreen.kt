@@ -54,7 +54,9 @@ fun TodayScreen(
     taskViewModel: TaskViewModel,
     lectureViewModel: LectureViewModel,
     onNavigateToAddTask: () -> Unit,
-    onNavigateToAddLecture: () -> Unit
+    onNavigateToAddLecture: () -> Unit,
+    onNavigateToEditTask: (Int) -> Unit = {},
+    onNavigateToEditLecture: (Int) -> Unit = {}
 ) {
     val todaysTasks by taskViewModel.todaysTasks.collectAsState()
     val todaysLectures by lectureViewModel.todaysLectures.collectAsState()
@@ -109,7 +111,7 @@ fun TodayScreen(
                 items(todaysLectures) { lecture ->
                     LectureCard(
                         lecture = lecture,
-                        onClick = { /* Navigate to edit */ }
+                        onClick = { onNavigateToEditLecture(lecture.id) }
                     )
                 }
             }
@@ -131,7 +133,7 @@ fun TodayScreen(
                         onCheckedChange = { isChecked ->
                             taskViewModel.toggleTaskCompletion(task.id, isChecked)
                         },
-                        onClick = { /* Navigate to edit */ }
+                        onClick = { onNavigateToEditTask(task.id) }
                     )
                 }
             }

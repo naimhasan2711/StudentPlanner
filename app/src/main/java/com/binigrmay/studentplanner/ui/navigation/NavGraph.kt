@@ -54,6 +54,12 @@ fun AppNavigation(
                     },
                     onNavigateToAddLecture = {
                         navController.navigate(Screen.AddLecture.route)
+                    },
+                    onNavigateToEditTask = { taskId ->
+                        navController.navigate(Screen.EditTask.createRoute(taskId))
+                    },
+                    onNavigateToEditLecture = { lectureId ->
+                        navController.navigate(Screen.EditLecture.createRoute(lectureId))
                     }
                 )
             }
@@ -79,6 +85,9 @@ fun AppNavigation(
                     },
                     onNavigateToAddLecture = {
                         navController.navigate(Screen.AddLecture.route)
+                    },
+                    onNavigateToEditLecture = { lectureId ->
+                        navController.navigate(Screen.EditLecture.createRoute(lectureId))
                     }
                 )
             }

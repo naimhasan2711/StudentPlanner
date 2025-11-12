@@ -60,7 +60,8 @@ fun CalendarScreen(
     taskViewModel: TaskViewModel,
     lectureViewModel: LectureViewModel,
     onNavigateToAddTask: () -> Unit,
-    onNavigateToAddLecture: () -> Unit
+    onNavigateToAddLecture: () -> Unit,
+    onNavigateToEditLecture: (Int) -> Unit = {}
 ) {
     val recurringLectures by lectureViewModel.recurringLectures.collectAsState()
     val selectedDayLectures by lectureViewModel.selectedDayLectures.collectAsState()
@@ -218,7 +219,7 @@ fun CalendarScreen(
                     items(selectedDayLectures) { lecture ->
                         LectureCard(
                             lecture = lecture,
-                            onClick = { /* Navigate to edit */ }
+                            onClick = { onNavigateToEditLecture(lecture.id) }
                         )
                     }
                     
