@@ -14,7 +14,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.binigrmay.studentplanner.MainActivity
-import com.binigrmay.studentplanner.R
 
 /**
  * Helper class for creating and managing notifications

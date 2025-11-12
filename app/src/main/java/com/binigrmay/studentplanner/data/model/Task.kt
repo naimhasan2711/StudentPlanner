@@ -2,7 +2,6 @@ package com.binigrmay.studentplanner.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Date
 
 /**
  * Task entity representing a student's task or deadline

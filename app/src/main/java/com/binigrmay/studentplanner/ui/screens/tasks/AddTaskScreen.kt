@@ -1,16 +1,54 @@
 package com.binigrmay.studentplanner.ui.screens.tasks
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.binigrmay.studentplanner.R
 import com.binigrmay.studentplanner.data.model.Priority
 import com.binigrmay.studentplanner.data.model.Task
 import com.binigrmay.studentplanner.ui.theme.PriorityHigh
@@ -19,7 +57,8 @@ import com.binigrmay.studentplanner.ui.theme.PriorityMedium
 import com.binigrmay.studentplanner.ui.theme.PriorityUrgent
 import com.binigrmay.studentplanner.viewmodel.TaskViewModel
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 /**
  * Helper function to format reminder time
@@ -110,7 +149,7 @@ fun AddTaskScreen(
                 onClick = { showDatePicker = true },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(Icons.Filled.DateRange, contentDescription = null)
+                Icon(painter = painterResource(id = R.drawable.ic_clock), contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("Due Date: ${SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(Date(dueDate))}")
             }
@@ -121,7 +160,7 @@ fun AddTaskScreen(
                     onClick = { expandedPriority = true },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Icon(Icons.Filled.Star, contentDescription = null)
+                    Icon(painter = painterResource(id = R.drawable.ic_priority), contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Priority: ${selectedPriority.name}")
                     Spacer(modifier = Modifier.weight(1f))
@@ -181,7 +220,7 @@ fun AddTaskScreen(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(Icons.Filled.Notifications, contentDescription = null)
+                            Icon(painter = painterResource(id = R.drawable.ic_remainder), contentDescription = null)
                             Text("Enable Reminder")
                         }
                         Switch(
