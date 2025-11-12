@@ -1,11 +1,15 @@
 package com.binigrmay.studentplanner.viewmodel
 
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.binigrmay.studentplanner.data.model.DayOfWeek
 import com.binigrmay.studentplanner.data.model.Lecture
 import com.binigrmay.studentplanner.data.repository.LectureRepository
+import com.binigrmay.studentplanner.utils.ReminderScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -16,8 +20,13 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class LectureViewModel @Inject constructor(
-    private val repository: LectureRepository
+    private val repository: LectureRepository,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
+    
+    companion object {
+        private const val TAG = "LectureViewModel"
+    }
     
     // All lectures
     val allLectures: StateFlow<List<Lecture>> = repository.getAllLectures()
@@ -116,19 +125,43 @@ class LectureViewModel @Inject constructor(
     
     fun insertLecture(lecture: Lecture) {
         viewModelScope.launch {
-            repository.insertLecture(lecture)
+            Log.d(TAG, "Inserting lecture: ${lecture.title}")
+            val lectureId = repository.insertLecture(lecture)
+            Log.d(TAG, "Lecture inserted with ID: $lectureId")
+            
+            // Schedule reminder if enabled
+            if (lecture.reminderEnabled && lectureId > 0) {
+                val lectureWithId = lecture.copy(id = lectureId.toInt())
+                Log.d(TAG, "Scheduling reminder for lecture: ${lectureWithId.title}")
+                ReminderScheduler.scheduleLectureReminder(context, lectureWithId)
+            }
         }
     }
     
     fun updateLecture(lecture: Lecture) {
         viewModelScope.launch {
+            Log.d(TAG, "Updating lecture: ${lecture.title}")
             repository.updateLecture(lecture)
+            
+            // Reschedule or cancel reminder based on reminder enabled status
+            if (lecture.reminderEnabled) {
+                Log.d(TAG, "Rescheduling reminder for lecture: ${lecture.title}")
+                ReminderScheduler.scheduleLectureReminder(context, lecture)
+            } else {
+                Log.d(TAG, "Cancelling reminder for lecture: ${lecture.title}")
+                ReminderScheduler.cancelLectureReminder(context, lecture.id)
+            }
         }
     }
     
     fun deleteLecture(lecture: Lecture) {
         viewModelScope.launch {
+            Log.d(TAG, "Deleting lecture: ${lecture.title}")
             repository.deleteLecture(lecture)
+            
+            // Cancel the reminder
+            Log.d(TAG, "Cancelling reminder for deleted lecture: ${lecture.title}")
+            ReminderScheduler.cancelLectureReminder(context, lecture.id)
         }
     }
     

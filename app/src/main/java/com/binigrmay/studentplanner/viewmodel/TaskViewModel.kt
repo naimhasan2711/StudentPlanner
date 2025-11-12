@@ -1,11 +1,15 @@
 package com.binigrmay.studentplanner.viewmodel
 
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.binigrmay.studentplanner.data.model.Priority
 import com.binigrmay.studentplanner.data.model.Task
 import com.binigrmay.studentplanner.data.repository.TaskRepository
+import com.binigrmay.studentplanner.utils.ReminderScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -16,8 +20,13 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class TaskViewModel @Inject constructor(
-    private val repository: TaskRepository
+    private val repository: TaskRepository,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
+    
+    companion object {
+        private const val TAG = "TaskViewModel"
+    }
     
     // All tasks
     val allTasks: StateFlow<List<Task>> = repository.getAllTasks()
@@ -117,19 +126,43 @@ class TaskViewModel @Inject constructor(
     
     fun insertTask(task: Task) {
         viewModelScope.launch {
-            repository.insertTask(task)
+            Log.d(TAG, "Inserting task: ${task.title}")
+            val taskId = repository.insertTask(task)
+            Log.d(TAG, "Task inserted with ID: $taskId")
+            
+            // Schedule reminder if enabled
+            if (task.reminderEnabled && taskId > 0) {
+                val taskWithId = task.copy(id = taskId.toInt())
+                Log.d(TAG, "Scheduling reminder for task: ${taskWithId.title}")
+                ReminderScheduler.scheduleTaskReminder(context, taskWithId)
+            }
         }
     }
     
     fun updateTask(task: Task) {
         viewModelScope.launch {
+            Log.d(TAG, "Updating task: ${task.title}")
             repository.updateTask(task)
+            
+            // Reschedule or cancel reminder based on reminder enabled status
+            if (task.reminderEnabled) {
+                Log.d(TAG, "Rescheduling reminder for task: ${task.title}")
+                ReminderScheduler.scheduleTaskReminder(context, task)
+            } else {
+                Log.d(TAG, "Cancelling reminder for task: ${task.title}")
+                ReminderScheduler.cancelTaskReminder(context, task.id)
+            }
         }
     }
     
     fun deleteTask(task: Task) {
         viewModelScope.launch {
+            Log.d(TAG, "Deleting task: ${task.title}")
             repository.deleteTask(task)
+            
+            // Cancel the reminder
+            Log.d(TAG, "Cancelling reminder for deleted task: ${task.title}")
+            ReminderScheduler.cancelTaskReminder(context, task.id)
         }
     }
     

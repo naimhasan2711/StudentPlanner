@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -18,6 +20,8 @@ import com.binigrmay.studentplanner.R
  * Helper class for creating and managing notifications
  */
 object NotificationHelper {
+    
+    private const val TAG = "NotificationHelper"
     
     const val CHANNEL_ID_TASKS = "task_reminders"
     const val CHANNEL_ID_LECTURES = "lecture_reminders"
@@ -31,6 +35,7 @@ object NotificationHelper {
      * Create notification channels (required for Android O and above)
      */
     fun createNotificationChannels(context: Context) {
+        Log.d(TAG, "Creating notification channels...")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Task reminders channel
             val taskChannel = NotificationChannel(
@@ -56,19 +61,34 @@ object NotificationHelper {
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(taskChannel)
             notificationManager.createNotificationChannel(lectureChannel)
+            Log.d(TAG, "✅ Notification channels created successfully")
+        } else {
+            Log.d(TAG, "Android version < O, channels not needed")
         }
     }
     
     /**
      * Show a task reminder notification
      */
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     fun showTaskNotification(
         context: Context,
         taskId: Int,
         title: String,
         description: String
     ) {
-        if (!hasNotificationPermission(context)) return
+        Log.d(TAG, "========== SHOWING TASK NOTIFICATION ==========")
+        Log.d(TAG, "Task ID: $taskId")
+        Log.d(TAG, "Title: $title")
+        Log.d(TAG, "Description: $description")
+        
+        if (!hasNotificationPermission(context)) {
+            Log.w(TAG, "❌ No notification permission!")
+            Log.d(TAG, "============================================")
+            return
+        }
+        
+        Log.d(TAG, "✅ Notification permission granted")
         
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -85,18 +105,28 @@ object NotificationHelper {
         val notification = NotificationCompat.Builder(context, CHANNEL_ID_TASKS)
             .setSmallIcon(android.R.drawable.ic_dialog_info) // Replace with your app icon
             .setContentTitle("Task Reminder: $title")
-            .setContentText(description)
+            .setContentText(description.ifBlank { "Task is due soon!" })
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .build()
         
-        NotificationManagerCompat.from(context).notify(taskId, notification)
+        try {
+            NotificationManagerCompat.from(context).notify(taskId, notification)
+            Log.d(TAG, "✅ Notification posted successfully!")
+        } catch (e: SecurityException) {
+            Log.e(TAG, "❌ SecurityException posting notification: ${e.message}")
+        } catch (e: Exception) {
+            Log.e(TAG, "❌ Exception posting notification: ${e.message}", e)
+        }
+        
+        Log.d(TAG, "============================================")
     }
     
     /**
      * Show a lecture reminder notification
      */
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     fun showLectureNotification(
         context: Context,
         lectureId: Int,
