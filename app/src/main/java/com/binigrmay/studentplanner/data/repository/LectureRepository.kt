@@ -33,25 +33,16 @@ class LectureRepository @Inject constructor(
     
     fun getLecturesByInstructor(instructorName: String): Flow<List<Lecture>> =
         lectureDao.getLecturesByInstructor(instructorName)
-    
-    suspend fun getLectureById(lectureId: Int): Lecture? =
-        lectureDao.getLectureById(lectureId)
-    
+
     suspend fun insertLecture(lecture: Lecture): Long =
         lectureDao.insertLecture(lecture)
-    
-    suspend fun insertLectures(lectures: List<Lecture>) =
-        lectureDao.insertLectures(lectures)
-    
+
     suspend fun updateLecture(lecture: Lecture) =
         lectureDao.updateLecture(lecture)
     
     suspend fun deleteLecture(lecture: Lecture) =
         lectureDao.deleteLecture(lecture)
-    
-    suspend fun deleteLectureById(lectureId: Int) =
-        lectureDao.deleteLectureById(lectureId)
-    
+
     suspend fun deleteAllLectures() =
         lectureDao.deleteAllLectures()
 }

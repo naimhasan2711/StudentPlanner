@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -51,7 +50,6 @@ import com.binigrmay.studentplanner.R
 import com.binigrmay.studentplanner.data.model.DayOfWeek
 import com.binigrmay.studentplanner.ui.components.LectureCard
 import com.binigrmay.studentplanner.viewmodel.LectureViewModel
-import com.binigrmay.studentplanner.viewmodel.TaskViewModel
 import java.util.Calendar
 
 /**
@@ -60,13 +58,11 @@ import java.util.Calendar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalendarScreen(
-    taskViewModel: TaskViewModel,
     lectureViewModel: LectureViewModel,
     onNavigateToAddTask: () -> Unit,
     onNavigateToAddLecture: () -> Unit,
     onNavigateToEditLecture: (Int) -> Unit = {}
 ) {
-    val recurringLectures by lectureViewModel.recurringLectures.collectAsState()
     val selectedDayLectures by lectureViewModel.selectedDayLectures.collectAsState()
     
     // Get current day of week

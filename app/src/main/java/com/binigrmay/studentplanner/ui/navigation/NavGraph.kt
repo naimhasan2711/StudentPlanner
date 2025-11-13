@@ -78,7 +78,6 @@ fun AppNavigation(
 
             composable(Screen.Calendar.route) {
                 CalendarScreen(
-                    taskViewModel = taskViewModel,
                     lectureViewModel = lectureViewModel,
                     onNavigateToAddTask = {
                         navController.navigate(Screen.AddTask.route)

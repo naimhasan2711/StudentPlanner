@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -27,8 +26,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -100,8 +97,9 @@ fun TodayScreen(
                     ) {
                         // Left side - Title with gradient icon
                         Row(
+                            modifier = Modifier.weight(1f, fill = false),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             // Elegant calendar badge with day number
                             Surface(
@@ -146,7 +144,7 @@ fun TodayScreen(
                                     text = stringResource(R.string.nav_today),
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontWeight = FontWeight.Bold,
-                                        fontSize = 28.sp
+                                        fontSize = 26.sp
                                     ),
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
@@ -171,9 +169,12 @@ fun TodayScreen(
                             }
                         }
                         
-                        // Right side - Stats badges
+                        // Right side - Stats badges (with space to prevent cutoff)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             // Tasks count badge
                             if (todaysTasks.isNotEmpty()) {
@@ -182,19 +183,19 @@ fun TodayScreen(
                                     color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f)
                                 ) {
                                     Row(
-                                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
                                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Icon(
                                             painter = painterResource(id = R.drawable.ic_task),
                                             contentDescription = null,
-                                            modifier = Modifier.size(16.dp),
+                                            modifier = Modifier.size(14.dp),
                                             tint = MaterialTheme.colorScheme.secondary
                                         )
                                         Text(
                                             text = todaysTasks.size.toString(),
-                                            style = MaterialTheme.typography.labelLarge.copy(
+                                            style = MaterialTheme.typography.labelMedium.copy(
                                                 fontWeight = FontWeight.Bold
                                             ),
                                             color = MaterialTheme.colorScheme.onSecondaryContainer
@@ -210,19 +211,19 @@ fun TodayScreen(
                                     color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.6f)
                                 ) {
                                     Row(
-                                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
                                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Icon(
                                             painter = painterResource(id = R.drawable.ic_home),
                                             contentDescription = null,
-                                            modifier = Modifier.size(16.dp),
+                                            modifier = Modifier.size(14.dp),
                                             tint = MaterialTheme.colorScheme.tertiary
                                         )
                                         Text(
                                             text = todaysLectures.size.toString(),
-                                            style = MaterialTheme.typography.labelLarge.copy(
+                                            style = MaterialTheme.typography.labelMedium.copy(
                                                 fontWeight = FontWeight.Bold
                                             ),
                                             color = MaterialTheme.colorScheme.onTertiaryContainer

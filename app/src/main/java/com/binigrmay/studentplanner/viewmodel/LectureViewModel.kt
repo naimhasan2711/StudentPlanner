@@ -16,9 +16,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -44,23 +41,7 @@ class LectureViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList()
         )
-    
-    // Recurring lectures
-    val recurringLectures: StateFlow<List<Lecture>> = repository.getRecurringLectures()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-    
-    // One-time lectures
-    val oneTimeLectures: StateFlow<List<Lecture>> = repository.getOneTimeLectures()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-    
+
     // Today's lectures
     private val _todaysLectures = MutableStateFlow<List<Lecture>>(emptyList())
     val todaysLectures: StateFlow<List<Lecture>> = _todaysLectures.asStateFlow()
@@ -71,24 +52,7 @@ class LectureViewModel @Inject constructor(
     
     // Search query
     private val _searchQuery = MutableStateFlow("")
-    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
-    
-    // Search results
-    val searchResults: StateFlow<List<Lecture>> = _searchQuery
-        .debounce(300)
-        .flatMapLatest { query ->
-            if (query.isBlank()) {
-                flowOf(emptyList())
-            } else {
-                repository.searchLectures(query)
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-    
+
     init {
         loadTodaysLectures()
     }
@@ -173,18 +137,5 @@ class LectureViewModel @Inject constructor(
             ReminderScheduler.cancelLectureReminder(context, lecture.id)
         }
     }
-    
-    fun deleteAllLectures() {
-        viewModelScope.launch {
-            repository.deleteAllLectures()
-        }
-    }
-    
-    fun updateSearchQuery(query: String) {
-        _searchQuery.value = query
-    }
-    
-    fun getLecturesByInstructor(instructorName: String): Flow<List<Lecture>> {
-        return repository.getLecturesByInstructor(instructorName)
-    }
+
 }

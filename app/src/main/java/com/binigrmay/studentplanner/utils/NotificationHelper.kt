@@ -172,11 +172,5 @@ object NotificationHelper {
             true
         }
     }
-    
-    /**
-     * Cancel a specific notification
-     */
-    fun cancelNotification(context: Context, notificationId: Int) {
-        NotificationManagerCompat.from(context).cancel(notificationId)
-    }
+
 }

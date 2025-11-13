@@ -4,20 +4,15 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.binigrmay.studentplanner.data.model.Priority
 import com.binigrmay.studentplanner.data.model.Task
 import com.binigrmay.studentplanner.data.repository.TaskRepository
 import com.binigrmay.studentplanner.utils.ReminderScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -66,28 +61,10 @@ class TaskViewModel @Inject constructor(
     
     // This week's tasks
     private val _thisWeekTasks = MutableStateFlow<List<Task>>(emptyList())
-    val thisWeekTasks: StateFlow<List<Task>> = _thisWeekTasks.asStateFlow()
-    
+
     // Search query
     private val _searchQuery = MutableStateFlow("")
-    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
-    
-    // Search results
-    val searchResults: StateFlow<List<Task>> = _searchQuery
-        .debounce(300)
-        .flatMapLatest { query ->
-            if (query.isBlank()) {
-                flowOf(emptyList())
-            } else {
-                repository.searchTasks(query)
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-    
+
     init {
         loadTodaysTasks()
         loadThisWeekTasks()
@@ -185,16 +162,5 @@ class TaskViewModel @Inject constructor(
             repository.deleteCompletedTasks()
         }
     }
-    
-    fun updateSearchQuery(query: String) {
-        _searchQuery.value = query
-    }
-    
-    fun getTasksByPriority(priority: Priority): Flow<List<Task>> {
-        return repository.getTasksByPriority(priority)
-    }
-    
-    fun getTasksByCategory(category: String): Flow<List<Task>> {
-        return repository.getTasksByCategory(category)
-    }
+
 }

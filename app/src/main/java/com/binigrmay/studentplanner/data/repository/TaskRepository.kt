@@ -36,25 +36,16 @@ class TaskRepository @Inject constructor(
     
     fun searchTasks(query: String): Flow<List<Task>> =
         taskDao.searchTasks(query)
-    
-    suspend fun getTaskById(taskId: Int): Task? =
-        taskDao.getTaskById(taskId)
-    
+
     suspend fun insertTask(task: Task): Long =
         taskDao.insertTask(task)
-    
-    suspend fun insertTasks(tasks: List<Task>) =
-        taskDao.insertTasks(tasks)
-    
+
     suspend fun updateTask(task: Task) =
         taskDao.updateTask(task)
     
     suspend fun deleteTask(task: Task) =
         taskDao.deleteTask(task)
-    
-    suspend fun deleteTaskById(taskId: Int) =
-        taskDao.deleteTaskById(taskId)
-    
+
     suspend fun deleteCompletedTasks() =
         taskDao.deleteCompletedTasks()
     
