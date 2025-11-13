@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.binigrmay.studentplanner.R
@@ -72,7 +73,7 @@ fun TodayScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("Today", style = MaterialTheme.typography.headlineSmall)
+                        Text(stringResource(R.string.nav_today), style = MaterialTheme.typography.headlineSmall)
                         Text(
                             todayDate,
                             style = MaterialTheme.typography.bodySmall,
@@ -86,7 +87,7 @@ fun TodayScreen(
             FloatingActionButton(
                 onClick = { showAddBottomSheet = true }
             ) {
-                Icon(Icons.Filled.Add, contentDescription = "Add")
+                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.cd_add))
             }
         }
     ) { paddingValues ->
@@ -101,7 +102,7 @@ fun TodayScreen(
             if (todaysLectures.isNotEmpty()) {
                 item {
                     Text(
-                        "Lectures",
+                        stringResource(R.string.title_lectures),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 16.dp)
@@ -120,7 +121,7 @@ fun TodayScreen(
             if (todaysTasks.isNotEmpty()) {
                 item {
                     Text(
-                        "Tasks & Deadlines",
+                        stringResource(R.string.title_tasks_deadlines),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = if (todaysLectures.isEmpty()) 16.dp else 8.dp)
@@ -152,12 +153,12 @@ fun TodayScreen(
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             Text(
-                                "No events today!",
+                                stringResource(R.string.desc_no_events_today),
                                 style = MaterialTheme.typography.titleLarge,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             Text(
-                                "Add tasks or lectures to get started",
+                                stringResource(R.string.desc_add_events),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -185,7 +186,7 @@ fun TodayScreen(
                 ) {
                     // Title
                     Text(
-                        text = "Create New",
+                        text = stringResource(R.string.title_create_new),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
@@ -210,18 +211,18 @@ fun TodayScreen(
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_task),
-                                contentDescription = "Add Task",
+                                contentDescription = stringResource(R.string.cd_add_task),
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(32.dp)
                             )
                             Column {
                                 Text(
-                                    text = "Add Task",
+                                    text = stringResource(R.string.action_add_task),
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.SemiBold
                                 )
                                 Text(
-                                    text = "Create a new task or deadline",
+                                    text = stringResource(R.string.desc_create_task),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -245,19 +246,19 @@ fun TodayScreen(
                             horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             Icon(
-                                painterResource(id = R.drawable.ic_schedule),
-                                contentDescription = "Add Lecture",
+                                painterResource(id = R.drawable.ic_home),
+                                contentDescription = stringResource(R.string.cd_add_lecture),
                                 tint = MaterialTheme.colorScheme.secondary,
                                 modifier = Modifier.size(32.dp)
                             )
                             Column {
                                 Text(
-                                    text = "Add Lecture",
+                                    text = stringResource(R.string.action_add_lecture),
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.SemiBold
                                 )
                                 Text(
-                                    text = "Schedule a new lecture or class",
+                                    text = stringResource(R.string.desc_create_lecture),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )

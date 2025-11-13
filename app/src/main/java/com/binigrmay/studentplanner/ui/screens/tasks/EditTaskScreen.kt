@@ -50,6 +50,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.binigrmay.studentplanner.R
 import com.binigrmay.studentplanner.data.model.Priority
@@ -122,15 +123,15 @@ fun EditTaskScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Edit Task") },
+                title = { Text(stringResource(R.string.title_edit_task)) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.cd_back))
                     }
                 },
                 actions = {
                     IconButton(onClick = { showDeleteDialog = true }) {
-                        Icon(Icons.Filled.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.error)
+                        Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.action_delete), tint = MaterialTheme.colorScheme.error)
                     }
                 }
             )
@@ -182,7 +183,7 @@ fun EditTaskScreen(
             OutlinedTextField(
                 value = title,
                 onValueChange = { title = it },
-                label = { Text("Task Title *") },
+                label = { Text(stringResource(R.string.label_title) + " *") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
@@ -191,7 +192,7 @@ fun EditTaskScreen(
             OutlinedTextField(
                 value = description,
                 onValueChange = { description = it },
-                label = { Text("Description") },
+                label = { Text(stringResource(R.string.label_description)) },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 3,
                 maxLines = 5
@@ -201,8 +202,8 @@ fun EditTaskScreen(
             OutlinedTextField(
                 value = category,
                 onValueChange = { category = it },
-                label = { Text("Category") },
-                placeholder = { Text("e.g., Homework, Exam, Project") },
+                label = { Text(stringResource(R.string.label_category)) },
+                placeholder = { Text(stringResource(R.string.placeholder_category)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
@@ -214,7 +215,7 @@ fun EditTaskScreen(
             ) {
                 Icon(painter = painterResource(id = R.drawable.ic_clock), contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Due Date: ${SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(Date(dueDate))}")
+                Text("${stringResource(R.string.label_due_date)}: ${SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(Date(dueDate))}")
             }
             
             // Priority Selector
@@ -225,7 +226,7 @@ fun EditTaskScreen(
                 ) {
                     Icon(painter = painterResource(id = R.drawable.ic_priority), contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Priority: ${selectedPriority.name}")
+                    Text("${stringResource(R.string.label_priority)}: ${selectedPriority.name}")
                     Spacer(modifier = Modifier.weight(1f))
                     Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
                 }
@@ -283,7 +284,7 @@ fun EditTaskScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(painter = painterResource(id = R.drawable.ic_remainder), contentDescription = null)
-                            Text("Enable Reminder")
+                            Text(stringResource(R.string.label_enable_reminder))
                         }
                         Switch(
                             checked = reminderEnabled,
@@ -300,7 +301,7 @@ fun EditTaskScreen(
                             ) {
                                 Icon(Icons.Filled.AccountBox, contentDescription = null)
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text("Remind me: ${formatReminderTime(reminderTime)}")
+                                Text("${stringResource(R.string.label_remind_me)} ${formatReminderTime(reminderTime)}")
                                 Spacer(modifier = Modifier.weight(1f))
                                 Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
                             }
@@ -310,12 +311,12 @@ fun EditTaskScreen(
                                 onDismissRequest = { expandedReminderTime = false }
                             ) {
                                 val reminderOptions = listOf(
-                                    15L to "15 minutes before",
-                                    30L to "30 minutes before",
-                                    60L to "1 hour before",
-                                    120L to "2 hours before",
-                                    1440L to "1 day before",
-                                    2880L to "2 days before"
+                                    15L to stringResource(R.string.reminder_15_min),
+                                    30L to stringResource(R.string.reminder_30_min),
+                                    60L to stringResource(R.string.reminder_1_hour),
+                                    120L to stringResource(R.string.reminder_2_hours),
+                                    1440L to stringResource(R.string.reminder_1_day),
+                                    2880L to stringResource(R.string.reminder_2_days)
                                 )
                                 
                                 reminderOptions.forEach { (minutes, label) ->
@@ -329,7 +330,7 @@ fun EditTaskScreen(
                                             if (reminderTime == minutes) {
                                                 Icon(
                                                     Icons.Filled.Check,
-                                                    contentDescription = "Selected",
+                                                    contentDescription = stringResource(R.string.cd_selected),
                                                     modifier = Modifier.size(20.dp)
                                                 )
                                             }
@@ -368,7 +369,7 @@ fun EditTaskScreen(
             ) {
                 Icon(Icons.Filled.Check, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Update Task")
+                Text(stringResource(R.string.action_update_task))
             }
         }
     }
@@ -383,12 +384,12 @@ fun EditTaskScreen(
                     datePickerState.selectedDateMillis?.let { dueDate = it }
                     showDatePicker = false
                 }) {
-                    Text("OK")
+                    Text(stringResource(R.string.action_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDatePicker = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.action_cancel))
                 }
             }
         ) {
@@ -401,8 +402,8 @@ fun EditTaskScreen(
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
             icon = { Icon(Icons.Filled.Delete, contentDescription = null) },
-            title = { Text("Delete Task") },
-            text = { Text("Are you sure you want to delete this task? This action cannot be undone.") },
+            title = { Text(stringResource(R.string.dialog_delete_task_title)) },
+            text = { Text(stringResource(R.string.dialog_delete_task_message)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -414,12 +415,12 @@ fun EditTaskScreen(
                         containerColor = MaterialTheme.colorScheme.error
                     )
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.action_delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.action_cancel))
                 }
             }
         )

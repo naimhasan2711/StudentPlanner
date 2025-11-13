@@ -44,6 +44,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.binigrmay.studentplanner.R
@@ -79,12 +80,12 @@ fun CalendarScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Weekly Schedule") }
+                title = { Text(stringResource(R.string.title_weekly_schedule)) }
             )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { showAddBottomSheet = true }) {
-                Icon(Icons.Filled.Add, contentDescription = "Add")
+                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.cd_add))
             }
         }
     ) { paddingValues ->
@@ -122,7 +123,7 @@ fun CalendarScreen(
                         ) {
                             Column(horizontalAlignment = Alignment.Start) {
                                 Text(
-                                    text = "Select Day",
+                                    text = stringResource(R.string.label_select_day),
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -136,7 +137,7 @@ fun CalendarScreen(
                             }
                             Icon(
                                 Icons.Filled.ArrowDropDown,
-                                contentDescription = "Expand",
+                                contentDescription = stringResource(R.string.cd_expand),
                                 tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
@@ -200,12 +201,12 @@ fun CalendarScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            "No lectures on ${selectedDay.name.lowercase().replaceFirstChar { it.uppercase() }}",
+                            stringResource(R.string.empty_lectures_on_day, selectedDay.name.lowercase().replaceFirstChar { it.uppercase() }),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
-                            "Add a lecture to this day",
+                            stringResource(R.string.empty_add_lecture_hint),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -245,7 +246,7 @@ fun CalendarScreen(
                 ) {
                     // Title
                     Text(
-                        text = "Create New",
+                        text = stringResource(R.string.title_create_new),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
@@ -270,18 +271,18 @@ fun CalendarScreen(
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_task),
-                                contentDescription = "Add Task",
+                                contentDescription = stringResource(R.string.cd_add_task),
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(32.dp)
                             )
                             Column {
                                 Text(
-                                    text = "Add Task",
+                                    text = stringResource(R.string.action_add_task),
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.SemiBold
                                 )
                                 Text(
-                                    text = "Create a new task or deadline",
+                                    text = stringResource(R.string.desc_create_task),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -305,19 +306,19 @@ fun CalendarScreen(
                             horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_schedule),
-                                contentDescription = "Add Lecture",
+                                painter = painterResource(id = R.drawable.ic_home),
+                                contentDescription = stringResource(R.string.cd_add_lecture),
                                 tint = MaterialTheme.colorScheme.secondary,
                                 modifier = Modifier.size(32.dp)
                             )
                             Column {
                                 Text(
-                                    text = "Add Lecture",
+                                    text = stringResource(R.string.action_add_lecture),
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.SemiBold
                                 )
                                 Text(
-                                    text = "Schedule a new lecture or class",
+                                    text = stringResource(R.string.desc_create_lecture),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
