@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -165,7 +166,7 @@ fun CalendarScreen(
                                         )
                                         if (day == selectedDay) {
                                             Icon(
-                                                Icons.Filled.Build,
+                                                Icons.Filled.Check,
                                                 contentDescription = "Selected",
                                                 tint = MaterialTheme.colorScheme.primary,
                                                 modifier = Modifier.size(20.dp)

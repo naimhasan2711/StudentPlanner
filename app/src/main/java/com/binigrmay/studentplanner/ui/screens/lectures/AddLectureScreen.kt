@@ -16,7 +16,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
@@ -167,6 +166,15 @@ fun AddLectureScreen(
                             onClick = {
                                 selectedDay = day
                                 expandedDay = false
+                            },
+                            trailingIcon = {
+                                if (selectedDay == day) {
+                                    Icon(
+                                        Icons.Filled.Check,
+                                        contentDescription = "Selected",
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
                             }
                         )
                     }
@@ -297,7 +305,7 @@ fun AddLectureScreen(
                                         trailingIcon = {
                                             if (reminderTime == minutes) {
                                                 Icon(
-                                                    Icons.Filled.Build,
+                                                    Icons.Filled.Check,
                                                     contentDescription = "Selected",
                                                     modifier = Modifier.size(20.dp)
                                                 )

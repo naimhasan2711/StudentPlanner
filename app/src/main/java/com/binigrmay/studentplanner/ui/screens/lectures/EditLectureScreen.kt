@@ -17,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Home
@@ -200,6 +199,15 @@ fun EditLectureScreen(
                             onClick = {
                                 selectedDay = day
                                 expandedDay = false
+                            },
+                            trailingIcon = {
+                                if (selectedDay == day) {
+                                    Icon(
+                                        Icons.Filled.Check,
+                                        contentDescription = "Selected",
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
                             }
                         )
                     }
@@ -330,7 +338,7 @@ fun EditLectureScreen(
                                         trailingIcon = {
                                             if (reminderTime == minutes) {
                                                 Icon(
-                                                    Icons.Filled.Build,
+                                                    Icons.Filled.Check,
                                                     contentDescription = "Selected",
                                                     modifier = Modifier.size(20.dp)
                                                 )
