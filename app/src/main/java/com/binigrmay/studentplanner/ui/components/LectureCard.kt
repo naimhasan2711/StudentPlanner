@@ -14,23 +14,33 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.binigrmay.studentplanner.R
@@ -44,9 +54,45 @@ import com.binigrmay.studentplanner.data.model.Lecture
 fun LectureCard(
     lecture: Lecture,
     onClick: () -> Unit,
+    onDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val lectureColor = Color(android.graphics.Color.parseColor(lecture.color))
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    
+    // Delete confirmation dialog
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text(stringResource(R.string.dialog_delete_lecture_title)) },
+            text = { 
+                Text(
+                    stringResource(
+                        R.string.dialog_delete_lecture_message, 
+                        lecture.title
+                    )
+                ) 
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteDialog = false
+                        onDelete()
+                    }
+                ) {
+                    Text(
+                        stringResource(R.string.action_delete),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            }
+        )
+    }
     
     Card(
         modifier = modifier
@@ -111,30 +157,54 @@ fun LectureCard(
                         modifier = Modifier.weight(1f)
                     )
                     
-                    if (lecture.isRecurring) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        if (lecture.isRecurring) {
+                            Surface(
+                                shape = RoundedCornerShape(20.dp),
+                                color = lectureColor.copy(alpha = 0.15f),
+                                border = BorderStroke(1.dp, lectureColor.copy(alpha = 0.3f)),
+                                shadowElevation = 2.dp
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(5.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_refresh),
+                                        contentDescription = "Recurring",
+                                        modifier = Modifier.size(16.dp),
+                                        tint = lectureColor
+                                    )
+                                    Text(
+                                        text = "Weekly",
+                                        style = MaterialTheme.typography.labelMedium.copy(
+                                            fontWeight = FontWeight.Bold
+                                        ),
+                                        color = lectureColor
+                                    )
+                                }
+                            }
+                        }
+                        
+                        // Delete button
                         Surface(
-                            shape = RoundedCornerShape(20.dp),
-                            color = lectureColor.copy(alpha = 0.15f),
-                            border = BorderStroke(1.dp, lectureColor.copy(alpha = 0.3f)),
-                            shadowElevation = 2.dp
+                            shape = CircleShape,
+                            color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f),
+                            modifier = Modifier.size(36.dp)
                         ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
-                                horizontalArrangement = Arrangement.spacedBy(5.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                            IconButton(
+                                onClick = { showDeleteDialog = true },
+                                modifier = Modifier.size(36.dp)
                             ) {
                                 Icon(
-                                    painter = painterResource(id = R.drawable.ic_refresh),
-                                    contentDescription = "Recurring",
-                                    modifier = Modifier.size(16.dp),
-                                    tint = lectureColor
-                                )
-                                Text(
-                                    text = "Weekly",
-                                    style = MaterialTheme.typography.labelMedium.copy(
-                                        fontWeight = FontWeight.Bold
-                                    ),
-                                    color = lectureColor
+                                    imageVector = Icons.Filled.Delete,
+                                    contentDescription = stringResource(R.string.cd_delete_lecture),
+                                    tint = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.size(20.dp)
                                 )
                             }
                         }

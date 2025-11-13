@@ -52,6 +52,7 @@ import com.binigrmay.studentplanner.data.model.DayOfWeek
 import com.binigrmay.studentplanner.ui.components.LectureCard
 import com.binigrmay.studentplanner.viewmodel.LectureViewModel
 import com.binigrmay.studentplanner.viewmodel.TaskViewModel
+import java.util.Calendar
 
 /**
  * Calendar screen showing weekly schedule
@@ -68,7 +69,12 @@ fun CalendarScreen(
     val recurringLectures by lectureViewModel.recurringLectures.collectAsState()
     val selectedDayLectures by lectureViewModel.selectedDayLectures.collectAsState()
     
-    var selectedDay by remember { mutableStateOf(DayOfWeek.MONDAY) }
+    // Get current day of week
+    val currentDayOfWeek = remember {
+        DayOfWeek.fromCalendar(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))
+    }
+    
+    var selectedDay by remember { mutableStateOf(currentDayOfWeek) }
     var expandedDayDropdown by remember { mutableStateOf(false) }
     var showAddBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
@@ -221,7 +227,8 @@ fun CalendarScreen(
                     items(selectedDayLectures) { lecture ->
                         LectureCard(
                             lecture = lecture,
-                            onClick = { onNavigateToEditLecture(lecture.id) }
+                            onClick = { onNavigateToEditLecture(lecture.id) },
+                            onDelete = { lectureViewModel.deleteLecture(lecture) }
                         )
                     }
                     

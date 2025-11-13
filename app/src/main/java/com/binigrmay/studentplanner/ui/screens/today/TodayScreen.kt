@@ -110,10 +110,6 @@ fun TodayScreen(
                 }
                 
                 items(todaysLectures) { lecture ->
-                    LectureCard(
-                        lecture = lecture,
-                        onClick = { onNavigateToEditLecture(lecture.id) }
-                    )
                 }
             }
             

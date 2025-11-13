@@ -50,6 +50,7 @@ import com.binigrmay.studentplanner.R
 import com.binigrmay.studentplanner.data.model.DayOfWeek
 import com.binigrmay.studentplanner.data.model.Lecture
 import com.binigrmay.studentplanner.viewmodel.LectureViewModel
+import java.util.Calendar
 
 /**
  * Helper function to format reminder time
@@ -78,7 +79,11 @@ fun AddLectureScreen(
     var title by remember { mutableStateOf("") }
     var instructor by remember { mutableStateOf("") }
     var room by remember { mutableStateOf("") }
-    var selectedDay by remember { mutableStateOf(DayOfWeek.MONDAY) }
+    // Get current day of week
+    val currentDayOfWeek = remember {
+        DayOfWeek.fromCalendar(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))
+    }
+    var selectedDay by remember { mutableStateOf(currentDayOfWeek) }
     var startTime by remember { mutableStateOf("09:00") }
     var endTime by remember { mutableStateOf("10:30") }
     var expandedDay by remember { mutableStateOf(false) }
