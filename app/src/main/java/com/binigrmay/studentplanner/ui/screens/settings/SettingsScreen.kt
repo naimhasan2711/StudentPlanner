@@ -36,14 +36,12 @@ fun SettingsScreen(
     viewModel: SettingsViewModel
 ) {
     val isDarkTheme by viewModel.isDarkTheme.collectAsState()
-    
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Settings") }
-            )
-        }
-    ) { paddingValues ->
+                title = { Text("Settings") })
+        }) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -62,9 +60,9 @@ fun SettingsScreen(
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.primary
                     )
-                    
+
                     Spacer(modifier = Modifier.height(8.dp))
-                    
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -75,13 +73,13 @@ fun SettingsScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                painter = if (isDarkTheme) painterResource(id = R.drawable.ic_dark) else painterResource(id = R.drawable.ic_light),
-                                contentDescription = "Dark Theme"
+                                painter = if (isDarkTheme) painterResource(id = R.drawable.ic_dark) else painterResource(
+                                    id = R.drawable.ic_light
+                                ), contentDescription = "Dark Theme"
                             )
                             Column {
                                 Text(
-                                    "Dark Theme",
-                                    style = MaterialTheme.typography.bodyLarge
+                                    "Dark Theme", style = MaterialTheme.typography.bodyLarge
                                 )
                                 Text(
                                     if (isDarkTheme) "Enabled" else "Disabled",
@@ -91,13 +89,11 @@ fun SettingsScreen(
                             }
                         }
                         Switch(
-                            checked = isDarkTheme,
-                            onCheckedChange = { viewModel.toggleTheme(it) }
-                        )
+                            checked = isDarkTheme, onCheckedChange = { viewModel.toggleTheme(it) })
                     }
                 }
             }
-            
+
             // About Section
             Card(
                 modifier = Modifier.fillMaxWidth(),
@@ -109,21 +105,20 @@ fun SettingsScreen(
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.primary
                     )
-                    
+
                     Spacer(modifier = Modifier.height(8.dp))
-                    
+
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_info) ,
+                            painter = painterResource(id = R.drawable.ic_info),
                             contentDescription = "App Info"
                         )
                         Column {
                             Text(
-                                "StudentPlanner",
-                                style = MaterialTheme.typography.bodyLarge
+                                "StudentPlanner", style = MaterialTheme.typography.bodyLarge
                             )
                             Text(
                                 "Version 1.0.0",
@@ -132,7 +127,7 @@ fun SettingsScreen(
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                "A comprehensive app for managing your lectures, tasks, and deadlines.",
+                                "A modern, feature-rich Android application designed specifically for students to efficiently manage their academic life. StudentPlanner helps you stay organized with tasks, lectures, and deadlines all in one beautiful interface.",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
