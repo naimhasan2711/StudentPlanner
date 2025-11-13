@@ -41,12 +41,27 @@ object ReminderScheduler {
             return
         }
         
+        // Combine dueDate and dueTime to get exact due timestamp
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = task.dueDate
+        
+        // Parse time from task.dueTime (format: "HH:mm")
+        val timeParts = task.dueTime.split(":")
+        val hour = timeParts.getOrNull(0)?.toIntOrNull() ?: 23
+        val minute = timeParts.getOrNull(1)?.toIntOrNull() ?: 59
+        
+        calendar.set(Calendar.HOUR_OF_DAY, hour)
+        calendar.set(Calendar.MINUTE, minute)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        
+        val exactDueTime = calendar.timeInMillis
         val currentTime = System.currentTimeMillis()
-        val reminderTime = task.dueDate - (task.reminderTime * 60 * 1000) // Convert minutes to milliseconds
+        val reminderTime = exactDueTime - (task.reminderTime * 60 * 1000) // Convert minutes to milliseconds
         val delay = reminderTime - currentTime
         
         Log.d(TAG, "Current Time: ${dateFormat.format(Date(currentTime))}")
-        Log.d(TAG, "Due Date: ${dateFormat.format(Date(task.dueDate))}")
+        Log.d(TAG, "Due Date + Time: ${dateFormat.format(Date(exactDueTime))}")
         Log.d(TAG, "Reminder Time: ${dateFormat.format(Date(reminderTime))}")
         Log.d(TAG, "Delay (ms): $delay (${delay / 1000 / 60} minutes)")
         

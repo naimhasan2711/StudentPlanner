@@ -110,10 +110,10 @@ fun TaskCard(
                         // Priority Badge
                         PriorityBadge(priority = task.priority)
                         
-                        // Due Date
+                        // Due Date and Time
                         val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
                         Text(
-                            text = dateFormat.format(Date(task.dueDate)),
+                            text = "${dateFormat.format(Date(task.dueDate))} ${task.dueTime}",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

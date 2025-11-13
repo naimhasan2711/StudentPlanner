@@ -17,6 +17,8 @@ data class Task(
     
     val dueDate: Long, // Store as timestamp
     
+    val dueTime: String = "23:59", // Store time as HH:mm format (default: end of day)
+    
     val priority: Priority = Priority.MEDIUM,
     
     val isCompleted: Boolean = false,

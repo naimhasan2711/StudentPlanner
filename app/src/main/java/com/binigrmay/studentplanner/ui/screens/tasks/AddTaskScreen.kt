@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -36,8 +37,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TimePickerState
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -89,7 +93,9 @@ fun AddTaskScreen(
     var selectedPriority by remember { mutableStateOf(Priority.MEDIUM) }
     var category by remember { mutableStateOf("") }
     var dueDate by remember { mutableStateOf(System.currentTimeMillis() + 86400000) } // Tomorrow
+    var dueTime by remember { mutableStateOf("23:59") } // Default end of day
     var showDatePicker by remember { mutableStateOf(false) }
+    var showTimePicker by remember { mutableStateOf(false) }
     var expandedPriority by remember { mutableStateOf(false) }
     var reminderEnabled by remember { mutableStateOf(false) }
     var reminderTime by remember { mutableStateOf(60L) } // Default 1 hour
@@ -152,6 +158,16 @@ fun AddTaskScreen(
                 Icon(painter = painterResource(id = R.drawable.ic_clock), contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("${stringResource(R.string.label_due_date)}: ${SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(Date(dueDate))}")
+            }
+            
+            // Due Time Picker
+            OutlinedButton(
+                onClick = { showTimePicker = true },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(painter = painterResource(id = R.drawable.ic_clock), contentDescription = null)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("${stringResource(R.string.label_due_time)}: $dueTime")
             }
             
             // Priority Selector
@@ -291,6 +307,7 @@ fun AddTaskScreen(
                                 title = title,
                                 description = description,
                                 dueDate = dueDate,
+                                dueTime = dueTime,
                                 priority = selectedPriority,
                                 category = category.ifBlank { "General" },
                                 reminderEnabled = reminderEnabled,
@@ -331,5 +348,35 @@ fun AddTaskScreen(
         ) {
             DatePicker(state = datePickerState)
         }
+    }
+    
+    // Time Picker Dialog
+    if (showTimePicker) {
+        val currentTime = dueTime.split(":")
+        val timePickerState = rememberTimePickerState(
+            initialHour = currentTime[0].toIntOrNull() ?: 23,
+            initialMinute = currentTime[1].toIntOrNull() ?: 59,
+            is24Hour = true
+        )
+        
+        AlertDialog(
+            onDismissRequest = { showTimePicker = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    dueTime = String.format("%02d:%02d", timePickerState.hour, timePickerState.minute)
+                    showTimePicker = false
+                }) {
+                    Text(stringResource(R.string.action_ok))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showTimePicker = false }) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            },
+            text = {
+                TimePicker(state = timePickerState)
+            }
+        )
     }
 }

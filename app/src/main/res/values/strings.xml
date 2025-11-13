@@ -43,6 +43,7 @@
     <string name="label_title">Title</string>
     <string name="label_description">Description</string>
     <string name="label_due_date">Due Date</string>
+    <string name="label_due_time">Due Time</string>
     <string name="label_priority">Priority</string>
     <string name="label_category">Category</string>
     <string name="label_reminder">Reminder</string>
@@ -58,6 +59,7 @@
     <string name="label_completed">Completed</string>
     <string name="label_remind_me">Remind me:</string>
     <string name="label_enable_reminder">Enable Reminder</string>
+    <string name="label_select_time">Select Time</string>
     
     <!-- Priority Levels -->
     <string name="priority_high">High</string>
