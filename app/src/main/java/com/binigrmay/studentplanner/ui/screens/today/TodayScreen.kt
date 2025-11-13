@@ -400,7 +400,7 @@ fun TodayScreen(
                             horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             Icon(
-                                painterResource(id = R.drawable.ic_home),
+                                painterResource(id = R.drawable.ic_room),
                                 contentDescription = stringResource(R.string.cd_add_lecture),
                                 tint = MaterialTheme.colorScheme.secondary,
                                 modifier = Modifier.size(32.dp)
